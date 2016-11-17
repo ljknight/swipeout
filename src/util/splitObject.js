@@ -1,13 +1,7 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = splitObject;
-function splitObject(obj, parts) {
-  var left = {};
-  var right = {};
-  Object.keys(obj).forEach(function (k) {
+export default function splitObject(obj, parts) {
+  const left = {};
+  const right = {};
+  Object.keys(obj).forEach((k) => {
     if (parts.indexOf(k) !== -1) {
       left[k] = obj[k];
     } else {
