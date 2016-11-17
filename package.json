@@ -20,7 +20,7 @@
   },
   "files": [
     "lib",
-    "assets/*.less"
+    "assets/*.css"
   ],
   "licenses": "MIT",
   "main": "./lib/index.web",
