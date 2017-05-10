@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "object.omit": "~2.0.0",
-    "react-hammerjs": "^0.5.0",
+    "rc-hammerjs": "^0.6.3",
     "react-native-swipe-out": "~2.0.12"
   },
   "devDependencies": {
