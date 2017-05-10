@@ -49,14 +49,16 @@ import 'rc-swipeout/assets/index.less';
     {
       text: 'reply',
       onPress:() => console.log('reply'),
-      style: { backgroundColor: 'orange', color: 'white' }
+      style: { backgroundColor: 'orange', color: 'white' },
+      className: 'custom-class-1'
     }
   ]}
   right={[
     {
       text: 'delete',
       onPress:() => console.log('delete'),
-      style: { backgroundColor: 'red', color: 'white' }
+      style: { backgroundColor: 'red', color: 'white' },
+      className: 'custom-class-2'
     }
   ]}
   onOpen={() => console.log('open')}
@@ -65,6 +67,12 @@ import 'rc-swipeout/assets/index.less';
   <div style={{height: 44}}> swipeout demo </div>
 </Swipeout>
 
+```
+
+For the React Native version, use the following import statement.
+
+```js
+import Swipeout from 'rc-swipeout/lib'
 ```
 
 ## API
@@ -89,6 +97,7 @@ import 'rc-swipeout/assets/index.less';
 | text       | button text     | String | `Click` |
 | style       | button style     | Object | `` |
 | onPress       | button press function      | Function | `function() {}` |
+| className       | button custom class     | String | `` |
 
 ## Test Case
 

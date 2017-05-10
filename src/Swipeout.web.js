@@ -31,7 +31,6 @@ class Swipeout extends React.Component {
     this.onPanStart = this.onPanStart.bind(this);
     this.onPan = this.onPan.bind(this);
     this.onPanEnd = this.onPanEnd.bind(this);
-    this.onTap = this.onTap.bind(this);
 
     this.openedLeft = false;
     this.openedRight = false;
@@ -58,8 +57,31 @@ class Swipeout extends React.Component {
     }
 
     this.contentWidth = width;
-    this.btnsLeftWidth = left ? (width / 5) * left.length : 0;
-    this.btnsRightWidth = right ? (width / 5) * right.length : 0;
+    this.btnsLeftWidth = (width / 5) * left.length;
+    this.btnsRightWidth = (width / 5) * right.length;
+
+    document.body.addEventListener('touchstart', this.onCloseSwipe.bind(this), true);
+  }
+
+  componentWillUnmount() {
+    document.body.removeEventListener('touchstart', this.onCloseSwipe.bind(this));
+  }
+
+  onCloseSwipe(ev) {
+    if (this.openedLeft || this.openedRight) {
+      const pNode = (node => {
+        while (node.parentNode && node.parentNode !== document.body) {
+          if (node.className.indexOf(`${this.props.prefixCls}-actions`) > -1) {
+            return node;
+          }
+          node = node.parentNode;
+        }
+      })(ev.target);
+      if (!pNode) {
+        ev.preventDefault();
+        this.close();
+      }
+    }
   }
 
   onPanStart(e) {
@@ -73,18 +95,11 @@ class Swipeout extends React.Component {
     if (this.props.disabled) {
       return;
     }
-
-    // get pan distance
-    let posX = e.deltaX - this.panStartX;
-    if (this.openedRight) {
-      posX = posX - this.btnsRightWidth;
-    } else if (this.openedLeft) {
-      posX = posX + this.btnsLeftWidth;
-    }
-
-    if (posX < 0 && this.props.right) {
+    const { left, right } = this.props;
+    const posX = e.deltaX - this.panStartX;
+    if (posX < 0 && right.length) {
       this._setStyle(Math.min(posX, 0));
-    } else if (posX > 0 && this.props.left) {
+    } else if (posX > 0 && left.length) {
       this._setStyle(Math.max(posX, 0));
     }
   }
@@ -94,20 +109,14 @@ class Swipeout extends React.Component {
       return;
     }
 
+    const { left, right } = this.props;
     const posX = e.deltaX - this.panStartX;
     const contentWidth = this.contentWidth;
     const btnsLeftWidth = this.btnsLeftWidth;
     const btnsRightWidth = this.btnsRightWidth;
     const openX = contentWidth * 0.33;
-    let openLeft = posX > openX || posX > btnsLeftWidth / 2;
-    let openRight = posX < -openX || posX < -btnsRightWidth / 2;
-
-    if (this.openedRight) {
-      openRight = posX - openX < -openX;
-    }
-    if (this.openedLeft) {
-      openLeft = posX + openX > openX;
-    }
+    const openLeft = posX > openX || posX > btnsLeftWidth / 2;
+    const openRight = posX < -openX || posX < -btnsRightWidth / 2;
 
     if (this.openedRight && openLeft && posX > 0) {
       this.close();
@@ -122,18 +131,11 @@ class Swipeout extends React.Component {
     }
   }
 
-  onTap(e) {
-    if (this.openedLeft || this.openedRight) {
-      e.preventDefault();
-      this.close();
-    }
-  }
-
   // left & right button click
-  onBtnClick(btn) {
+  onBtnClick(ev, btn) {
     const onPress = btn.onPress;
     if (onPress) {
-      onPress();
+      onPress(ev);
     }
     if (this.props.autoClose) {
       this.close();
@@ -156,6 +158,8 @@ class Swipeout extends React.Component {
     const limit = value > 0 ? this.btnsLeftWidth : -this.btnsRightWidth;
     const contentLeft = this._getContentEasing(value, limit);
     this.refs.content.style.left = `${contentLeft}px`;
+    this.refs.cover.style.display = Math.abs(value) > 0 ? 'block' : 'none';
+    this.refs.cover.style.left = `${contentLeft}px`;
     if (left.length) {
       const leftWidth = Math.max(Math.min(value, Math.abs(limit)), 0);
       this.refs.left.style.width = `${leftWidth}px`;
@@ -202,9 +206,9 @@ class Swipeout extends React.Component {
       });
     }
 
+    this._setStyle(0);
     this.openedLeft = false;
     this.openedRight = false;
-    this._setStyle(0);
   }
 
   renderButtons(buttons, ref) {
@@ -215,9 +219,10 @@ class Swipeout extends React.Component {
         {buttons.map((btn, i) => {
           return (
             <div key={i}
-              className={`${prefixCls}-btn`}
+              className={`${prefixCls}-btn ${btn.hasOwnProperty('className') ? btn.className : ''}`}
               style={btn.style}
-              onClick={() => this.onBtnClick(btn)}
+              role="button"
+              onClick={(e) => this.onBtnClick(e, btn)}
             >
               <div className={`${prefixCls}-text`}>{btn.text || 'Click'}</div>
             </div>
@@ -241,20 +246,20 @@ class Swipeout extends React.Component {
 
     return (left.length || right.length) ? (
       <div className={`${prefixCls}`} {...divProps}>
+        {/* 保证 body touchStart 后不触发 pan */}
+        <div className={`${prefixCls}-cover`} ref="cover" />
+        { this.renderButtons(left, 'left') }
+        { this.renderButtons(right, 'right') }
         <Hammer
           direction={this.state.direction}
           onPanStart={this.onPanStart}
           onPan={this.onPan}
           onPanEnd={this.onPanEnd}
-          onTap={this.onTap}
         >
           <div className={`${prefixCls}-content`} ref="content">
             {children}
           </div>
         </Hammer>
-
-        { this.renderButtons(left, 'left') }
-        { this.renderButtons(right, 'right') }
       </div>
     ) : (
       <div ref="content" {...divProps}>{children}</div>

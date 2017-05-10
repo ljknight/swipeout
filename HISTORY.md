@@ -1,5 +1,36 @@
 # History
 
+# 1.2.7
+
+- new: role="button"
+
+# 1.2.6
+
+- new: support `className` for button;
+
+# 1.2.5
+
+- fix: onCloseSwipe prefixCls bug;
+
+## 1.2.3
+
+- add cover `div`, for body touchstart
+- fix: buttons cannot be hidden when pan short distance
+
+## 1.2.2
+
+- prevent default of event;
+
+## 1.2.1
+
+- support `onClose` for rn;
+
+## 1.2.0
+
+- click body to close swipe buttons; #19, #10
+- support event arg for onPress; #18
+- swipe to close for web;
+
 ## 1.1.5
 
 - fix issue/9
