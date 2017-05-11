@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import Hammer from 'rc-hammerjs';
 import omit from 'object.omit';
 import splitObject from './util/splitObject';
@@ -28,6 +28,7 @@ class Swipeout extends React.Component {
 
   constructor(props) {
     super(props);
+    const { left, right } = props;
 
     this.onPanStart = this.onPanStart.bind(this);
     this.onPan = this.onPan.bind(this);
@@ -36,27 +37,19 @@ class Swipeout extends React.Component {
 
     this.openedLeft = false;
     this.openedRight = false;
-  }
 
-  state = {
-    direction: 'DIRECTION_HORIZONTAL',
+    if (left.length && right.length === 0) {
+      this.state.direction = 'DIRECTION_RIGHT';
+    } else if (right.length && left.length === 0) {
+      this.state.direction = 'DIRECTION_LEFT';
+    } else {
+      this.state.direction = 'DIRECTION_HORIZONTAL';
+    }
   }
 
   componentDidMount() {
     const { left, right } = this.props;
     const width = this.refs.content.offsetWidth;
-
-    if (left.length && right.length === 0) {
-      this.setState({
-        direction: 'DIRECTION_RIGHT',
-      });
-    }
-
-    if (right.length && left.length === 0) {
-      this.setState({
-        direction: 'DIRECTION_LEFT',
-      });
-    }
 
     this.contentWidth = width;
     this.btnsLeftWidth = left ? (width / 5) * left.length : 0;

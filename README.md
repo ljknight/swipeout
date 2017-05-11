@@ -1,5 +1,6 @@
 # rc-swipeout
 ---
+Fork of rc-swipeout with added functionality for swipe to close.
 
 iOS-style swipeout buttons that appear from behind a component (web & react-native support)
 
@@ -25,7 +26,7 @@ iOS-style swipeout buttons that appear from behind a component (web & react-nati
 ## Development
 
 ```
-web: 
+web:
 npm install
 npm start
 

@@ -42,7 +42,7 @@
   "dependencies": {
     "object.omit": "~2.0.0",
     "prop-types": "^15.5.9",
-    "rc-hammerjs": "ljknight/react-hammerjs#compile",
+    "rc-hammerjs": "0.6.4",
     "react-native-swipe-out": "~2.0.12"
   },
   "devDependencies": {
@@ -56,11 +56,10 @@
     "expect.js": "0.3.x",
     "hammer-simulator": "0.0.1",
     "pre-commit": "1.x",
-    "rc-tools": "5.x",
-    "react": "~15.2.1",
-    "react-addons-test-utils": "~15.2.1",
-    "react-dom": "~15.2.1",
-    "react-native": "0.30.0"
+    "rc-tools": "6.x",
+    "react": "15.5.4",
+    "react-dom": "15.5.4",
+    "react-native": "0.44.0"
   },
   "pre-commit": [
     "lint"
