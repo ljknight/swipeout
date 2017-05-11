@@ -42,7 +42,7 @@
   "dependencies": {
     "object.omit": "~2.0.0",
     "prop-types": "^15.5.9",
-    "rc-hammerjs": "ljknight/react-hammerjs#def-direction",
+    "rc-hammerjs": "ljknight/react-hammerjs#compile",
     "react-native-swipe-out": "~2.0.12"
   },
   "devDependencies": {
